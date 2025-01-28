@@ -4,7 +4,7 @@ A **Spring Boot Starter** for interacting with the Solana blockchain, designed t
 
 ## Features
 
--  **Easy integration**: Simplify the process of interacting with Solana RPC nodes.
+- 🛠 **Easy integration**: Simplify the process of interacting with Solana RPC nodes.
 - 📡 **RPC Client Support**: Utilize Solana's JSON-RPC endpoints through `solanaj`.
 - 🔑 **Transaction Support**: Perform transfers, interact with accounts, and execute on-chain transactions.
 - 🚀 **Spring Boot Auto-Configuration**: Automatically configure Solana clients and beans for dependency injection.
