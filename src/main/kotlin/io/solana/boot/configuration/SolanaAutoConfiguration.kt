@@ -1,6 +1,7 @@
 package io.solana.boot.configuration
 
 
+import io.solana.boot.properties.SolanaProperties
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -11,7 +12,7 @@ import org.springframework.web.client.RestClient
 
 @Configuration
 @ConditionalOnProperty(prefix = "solana", name = ["enabled"], havingValue = "true", matchIfMissing = true)
-@EnableConfigurationProperties(io.solana.boot.properties.SolanaProperties::class)
+@EnableConfigurationProperties(SolanaProperties::class)
 class SolanaAutoConfiguration {
 
     @Bean
