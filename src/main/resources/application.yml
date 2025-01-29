@@ -1,7 +1,3 @@
-spring:
-  application:
-    name: solana-spring-boot-starter
-
 solana:
   enabled: true
   endpoint: "https://api.devnet.solana.com"

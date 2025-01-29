@@ -1,4 +1,4 @@
-package com.solanaBoot.starter.properties
+package io.solana.boot.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

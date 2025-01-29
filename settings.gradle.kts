@@ -1,1 +1,1 @@
-rootProject.name = "solana-spring-boot-starter"
+rootProject.name = "solana-boot-starter"

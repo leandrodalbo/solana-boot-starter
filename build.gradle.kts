@@ -5,8 +5,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
-group = "com.solana-boot.starter"
-version = "0.0.1-SNAPSHOT"
+group = "io.solana.boot"
+version = "1.0.0"
 
 java {
     toolchain {
@@ -19,9 +19,10 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("com.mmorrell:solanaj:1.19.0")
+    implementation("org.bitcoinj:bitcoinj-core:0.15.10")
+
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -40,13 +41,12 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks {
+tasks.named<Jar>("jar") {
+    enabled = true
+    archiveBaseName.set("solana-boot-starter")
+    archiveClassifier.set("")
+}
 
-    bootJar {
-        enabled = false
-    }
-
-    jar {
-        enabled = true
-    }
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    enabled = false
 }
