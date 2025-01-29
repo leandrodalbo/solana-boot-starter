@@ -3,10 +3,24 @@ plugins {
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
+    id("maven-publish")
 }
 
-group = "io.solana.boot"
-version = "1.0.0"
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            groupId = "io.solana.boot"
+            artifactId = "solana-boot-starter" // Use your desired artifact name
+            version = "1.0.0"
+        }
+    }
+    repositories {
+        maven {
+            mavenLocal()
+        }
+    }
+}
 
 java {
     toolchain {
@@ -50,3 +64,4 @@ tasks.named<Jar>("jar") {
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     enabled = false
 }
+
