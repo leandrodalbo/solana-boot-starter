@@ -1,3 +1,0 @@
-solana:
-  enabled: true
-  endpoint: "https://api.devnet.solana.com"
