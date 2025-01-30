@@ -27,10 +27,10 @@ data class RpcRequest(
             )
         }
 
-        fun createGetBalanceRequest(base64PublicKey: String): RpcRequest {
+        fun createGetBalanceRequest(publicKey: String): RpcRequest {
             return RpcRequest(
                 method = RpcRequestMethod.GET_BALANCE.methodName,
-                params = listOf(io.solana.boot.keys.KeyUtils.encodeToBase58(base64PublicKey))
+                params = listOf(publicKey)
             )
         }
     }

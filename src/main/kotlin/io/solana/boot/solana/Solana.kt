@@ -1,44 +1,47 @@
 package io.solana.boot.solana
 
+import io.solana.boot.errors.AccountBalanceRequestException
+import io.solana.boot.keys.KeyUtils
+import io.solana.boot.request.RpcRequest
+import io.solana.boot.response.AccountBalance
+import io.solana.boot.response.AccountBalanceResponse
+import io.solana.boot.response.TransactionResponse
 import org.springframework.web.client.RestClient
 import java.security.PrivateKey
-import java.security.PublicKey
 
 class Solana(val client: RestClient) {
 
     fun transfer(
         base64SenderPrivateKey: String,
-        base64SenderPublicKey: String,
-        base64ReceiverPublicKey: String,
+        senderPublicKey: String,
+        receiverPublicKey: String,
         amount: Long
     ): String {
-        val senderPrivateKey: PrivateKey = io.solana.boot.keys.KeyUtils.decodePrivateKey(base64SenderPrivateKey)
-        val senderPublicKey: PublicKey = io.solana.boot.keys.KeyUtils.decodePublicKey(base64SenderPublicKey)
-        val receiverPublicKey: PublicKey = io.solana.boot.keys.KeyUtils.decodePublicKey(base64ReceiverPublicKey)
+        val senderPrivateKey: PrivateKey = KeyUtils.decodePrivateKey(base64SenderPrivateKey)
 
-        val transactionMessage = io.solana.boot.request.RpcRequest.createTransactionMessage(
-            io.solana.boot.keys.KeyUtils.encodeToBase58(io.solana.boot.keys.KeyUtils.encodeToBase64(senderPublicKey.encoded)),
-            io.solana.boot.keys.KeyUtils.encodeToBase58(io.solana.boot.keys.KeyUtils.encodeToBase64(receiverPublicKey.encoded)),
+        val transactionMessage = RpcRequest.createTransactionMessage(
+            KeyUtils.encodeToBase58(senderPublicKey),
+            KeyUtils.encodeToBase58(receiverPublicKey),
             amount
         )
 
-        val signedTransaction = io.solana.boot.keys.KeyUtils.signTransaction(transactionMessage.toByteArray(), senderPrivateKey)
+        val signedTransaction = KeyUtils.signTransaction(transactionMessage.toByteArray(), senderPrivateKey)
 
         val response = client.post()
-            .body(io.solana.boot.request.RpcRequest.createTransactionRequest(transactionMessage, signedTransaction))
+            .body(RpcRequest.createTransactionRequest(transactionMessage, signedTransaction))
             .retrieve()
-            .body(io.solana.boot.response.TransactionResponse::class.java)
-            ?: throw io.solana.boot.errors.AccountBalanceRequestException("Transaction failed sender: $senderPublicKey, receiver:$receiverPublicKey, amount: $amount")
+            .body(TransactionResponse::class.java)
+            ?: throw AccountBalanceRequestException("Transaction failed sender: $senderPublicKey, receiver:$receiverPublicKey, amount: $amount")
 
         return response.result
     }
 
-    fun getBalance(base64PublicKey: String): io.solana.boot.response.AccountBalance {
+    fun getBalance(publicKey: String): AccountBalance {
         val response = client.post()
-            .body(io.solana.boot.request.RpcRequest.createGetBalanceRequest(base64PublicKey))
+            .body(RpcRequest.createGetBalanceRequest(publicKey))
             .retrieve()
-            .body(io.solana.boot.response.AccountBalanceResponse::class.java)
-            ?: throw io.solana.boot.errors.AccountBalanceRequestException("Failed to fetch balance for ${base64PublicKey}")
+            .body(AccountBalanceResponse::class.java)
+            ?: throw AccountBalanceRequestException("Failed to fetch balance for ${publicKey}")
 
         return response.result
     }

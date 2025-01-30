@@ -2,10 +2,10 @@ package io.solana.boot.keys
 
 import java.security.KeyFactory
 import java.security.PrivateKey
-import java.security.PublicKey
 import java.util.Base64
 import org.bitcoinj.core.Base58
 import java.security.Signature
+import java.security.spec.PKCS8EncodedKeySpec
 
 
 object KeyUtils {
@@ -14,14 +14,7 @@ object KeyUtils {
     fun decodePrivateKey(base64Key: String): PrivateKey {
         val privateKeyBytes = Base64.getDecoder().decode(base64Key)
         val keyFactory = KeyFactory.getInstance(ALGORITHM)
-        return keyFactory.generatePrivate(java.security.spec.PKCS8EncodedKeySpec(privateKeyBytes))
-    }
-
-    fun decodePublicKey(base64Key: String): PublicKey {
-        val publicKeyBytes = Base64.getDecoder().decode(base64Key)
-        val keyFactory = KeyFactory.getInstance(ALGORITHM)
-        val publicKeySpec = java.security.spec.X509EncodedKeySpec(publicKeyBytes)
-        return keyFactory.generatePublic(publicKeySpec)
+        return keyFactory.generatePrivate(PKCS8EncodedKeySpec(privateKeyBytes))
     }
 
     fun encodeToBase58(base64Key: String): String {
