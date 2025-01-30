@@ -1,4 +1,4 @@
-package io.solana.boot.keys
+package io.bootsolana.keys
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

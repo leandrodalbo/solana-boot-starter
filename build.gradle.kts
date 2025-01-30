@@ -10,7 +10,7 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            groupId = "io.solana.boot"
+            groupId = "io.bootsolana"
             artifactId = "solana-boot-starter" // Use your desired artifact name
             version = "1.0.0"
         }
@@ -36,7 +36,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.bitcoinj:bitcoinj-core:0.15.10")
-
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

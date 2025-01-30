@@ -1,4 +1,4 @@
-package io.solana.boot.response
+package io.bootsolana.response
 
 data class AccountBalanceResponse(
     val result: AccountBalance

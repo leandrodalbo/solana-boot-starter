@@ -1,4 +1,4 @@
-package io.solana.boot.keys
+package io.bootsolana.keys
 
 import java.security.KeyFactory
 import java.security.PrivateKey
@@ -6,7 +6,6 @@ import java.util.Base64
 import org.bitcoinj.core.Base58
 import java.security.Signature
 import java.security.spec.PKCS8EncodedKeySpec
-
 
 object KeyUtils {
     val ALGORITHM = "Ed25519"
@@ -32,5 +31,4 @@ object KeyUtils {
         val signedData = signature.sign()
         return Base64.getEncoder().encodeToString(signedData)
     }
-
 }

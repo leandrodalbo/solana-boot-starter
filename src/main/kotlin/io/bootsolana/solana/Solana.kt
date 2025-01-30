@@ -1,11 +1,11 @@
-package io.solana.boot.solana
+package io.bootsolana.solana
 
-import io.solana.boot.errors.AccountBalanceRequestException
-import io.solana.boot.keys.KeyUtils
-import io.solana.boot.request.RpcRequest
-import io.solana.boot.response.AccountBalance
-import io.solana.boot.response.AccountBalanceResponse
-import io.solana.boot.response.TransactionResponse
+import io.bootsolana.errors.AccountBalanceRequestException
+import io.bootsolana.keys.KeyUtils
+import io.bootsolana.request.RpcRequest
+import io.bootsolana.response.AccountBalance
+import io.bootsolana.response.AccountBalanceResponse
+import io.bootsolana.response.TransactionResponse
 import org.springframework.web.client.RestClient
 import java.security.PrivateKey
 

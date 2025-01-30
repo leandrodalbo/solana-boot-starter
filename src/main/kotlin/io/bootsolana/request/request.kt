@@ -1,4 +1,4 @@
-package io.solana.boot.request
+package io.bootsolana.request
 
 import java.util.UUID
 
