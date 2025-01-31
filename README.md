@@ -1,14 +1,13 @@
 # Solana Boot Starter
 
-A **Spring Boot Starter** to interact with the Solana blockchain. Designed to simplify blockchain development for Java/Kotlin developers. 
-Making it easy to integrate Solana functionalities into your Spring Boot projects, reducing boilerplate and accelerating development.
+A **Spring Boot Starter** to interact with the Solana blockchain.
+Simplifies blockchain development for Java/Kotlin developers by seamlessly integrating Solana into Spring Boot, reducing boilerplate and speeding up development.
 
 ## Features
-
-- 🛠 **Easy integration**: Simplify the process of interacting with Solana RPC nodes.
-- 📡 **RPC Client Support**: Utilize Solana's JSON-RPC endpoints through Solanaj.
-- 🔑 **Transaction Support**: Perform transfers, interact with accounts, and execute on-chain transactions.
-- 🚀 **Spring Boot Auto-Configuration**: Automatically configure Solana bean to interact with the blockchain.
+- 🛠 **Simple Integration**: Easily connect to Solana RPC nodes.
+- 📡 **RPC Client Support**: Access Solana's JSON-RPC endpoints with Solanaj.
+- 🔑 **Transaction Support**: Send transfers, interact with accounts, and execute on-chain transactions.
+- 🚀 **Spring Boot Auto-Configuration**: Automatically set up a Solana bean for blockchain interaction.
 
 ## Solanaj
 - https://github.com/skynetcap/solanaj
