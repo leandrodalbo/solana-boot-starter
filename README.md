@@ -1,13 +1,17 @@
 # Solana Boot Starter
 
-A **Spring Boot Starter** for interacting with the Solana blockchain, designed to simplify blockchain development for Java/Kotlin developers. With this starter, you can seamlessly integrate Solana functionalities into your Spring Boot projects, reducing boilerplate and accelerating development.
+A **Spring Boot Starter** to interact with the Solana blockchain. Designed to simplify blockchain development for Java/Kotlin developers. 
+Making it easy to integrate Solana functionalities into your Spring Boot projects, reducing boilerplate and accelerating development.
 
 ## Features
 
 - 🛠 **Easy integration**: Simplify the process of interacting with Solana RPC nodes.
-- 📡 **RPC Client Support**: Utilize Solana's JSON-RPC endpoints through RestClient.
+- 📡 **RPC Client Support**: Utilize Solana's JSON-RPC endpoints through Solanaj.
 - 🔑 **Transaction Support**: Perform transfers, interact with accounts, and execute on-chain transactions.
-- 🚀 **Spring Boot Auto-Configuration**: Automatically configure Solana clients and beans for dependency injection.
+- 🚀 **Spring Boot Auto-Configuration**: Automatically configure Solana bean to interact with the blockchain.
+
+## Solanaj
+- https://github.com/skynetcap/solanaj
 
 ## Getting Started
 
@@ -20,14 +24,14 @@ Add the starter to your Spring Boot project's dependencies:
 #### Gradle (Kotlin DSL)
 ```kotlin
 dependencies {
-    implementation("io.solana.boot:solana-boot-starter:1.0.0")
+    implementation("io.bootsolana:solana-boot-starter:1.0.0")
 }
 ```
 
 #### Maven
 ```xml
 <dependency>
-    <groupId>io.solana.boot</groupId>
+    <groupId>io.bootsolana</groupId>
     <artifactId>solana-boot-starter</artifactId>
     <version>1.0.0</version>
 </dependency>
