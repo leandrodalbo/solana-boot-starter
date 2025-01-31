@@ -1,49 +1,37 @@
 package io.bootsolana.solana
 
-import io.bootsolana.errors.AccountBalanceRequestException
-import io.bootsolana.keys.KeyUtils
-import io.bootsolana.request.RpcRequest
-import io.bootsolana.response.AccountBalance
-import io.bootsolana.response.AccountBalanceResponse
-import io.bootsolana.response.TransactionResponse
-import org.springframework.web.client.RestClient
-import java.security.PrivateKey
+import org.bitcoinj.core.Base58
+import org.p2p.solanaj.core.Account
+import org.p2p.solanaj.core.PublicKey
+import org.p2p.solanaj.core.Transaction
+import org.p2p.solanaj.programs.SystemProgram
+import org.p2p.solanaj.rpc.RpcClient
 
-class Solana(val client: RestClient) {
+class Solana(val client: RpcClient) {
 
     fun transfer(
-        base64SenderPrivateKey: String,
-        senderPublicKey: String,
+        base58SenderPrivateKey: String,
         receiverPublicKey: String,
-        amount: Long
+        sol: Double
     ): String {
-        val senderPrivateKey: PrivateKey = KeyUtils.decodePrivateKey(base64SenderPrivateKey)
+        try {
+            val fromAccount = Account(Base58.decode(base58SenderPrivateKey))
+            val toPublicKey = PublicKey(receiverPublicKey)
+            val lamports = lamportsFromSol(sol)
 
-        val transactionMessage = RpcRequest.createTransactionMessage(
-            KeyUtils.encodeToBase58(senderPublicKey),
-            KeyUtils.encodeToBase58(receiverPublicKey),
-            amount
-        )
+            val transaction = Transaction()
+            transaction.addInstruction(SystemProgram.transfer(fromAccount.publicKey, toPublicKey, lamports))
+            return client.api.sendTransaction(transaction, fromAccount)
 
-        val signedTransaction = KeyUtils.signTransaction(transactionMessage.toByteArray(), senderPrivateKey)
-
-        val response = client.post()
-            .body(RpcRequest.createTransactionRequest(transactionMessage, signedTransaction))
-            .retrieve()
-            .body(TransactionResponse::class.java)
-            ?: throw AccountBalanceRequestException("Transaction failed sender: $senderPublicKey, receiver:$receiverPublicKey, amount: $amount")
-
-        return response.result
+        } catch (e: Exception) {
+            throw RuntimeException("Transaction failed", e)
+        }
     }
 
-    fun getBalance(publicKey: String): AccountBalance {
-        val response = client.post()
-            .body(RpcRequest.createGetBalanceRequest(publicKey))
-            .retrieve()
-            .body(AccountBalanceResponse::class.java)
-            ?: throw AccountBalanceRequestException("Failed to fetch balance for ${publicKey}")
 
-        return response.result
-    }
+    fun getBalance(publicKey: String): Double = lamportsToSol(client.api.getBalance(PublicKey(publicKey)))
 
+    private fun lamportsToSol(lamports: Long) = lamports / 1_000_000_000.0
+
+    private fun lamportsFromSol(sol: Double) = (sol * 1_000_000_000).toLong()
 }
