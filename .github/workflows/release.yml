@@ -38,4 +38,5 @@ jobs:
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
+          ./gradlew clean build
           ./gradlew publishToMavenCentral --no-daemon
