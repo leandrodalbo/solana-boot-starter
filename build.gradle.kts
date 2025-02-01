@@ -3,23 +3,8 @@ plugins {
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
-    id("maven-publish")
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            groupId = "io.bootsolana"
-            artifactId = "solana-boot-starter" // Use your desired artifact name
-            version = "1.0.0"
-        }
-    }
-    repositories {
-        maven {
-            mavenLocal()
-        }
-    }
+    id("com.vanniktech.maven.publish") version "0.30.0"
+    //id("maven-publish")
 }
 
 java {
@@ -30,8 +15,8 @@ java {
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -65,3 +50,19 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     enabled = false
 }
 
+
+//publishing {
+//    publications {
+//        create<MavenPublication>("mavenJava") {
+//            from(components["java"])
+//            groupId = "io.bootsolana"
+//            artifactId = "solana-boot-starter"
+//            version = "1.0.0"
+//        }
+//    }
+//    repositories {
+//        maven {
+//            mavenLocal()
+//        }
+//    }
+//}
