@@ -26,17 +26,19 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          mkdir -p ~/.gnupg  
-          echo "$GPG_PRIVATE_KEY" | base64 --decode > ~/.gnupg/secring.gpg
-          chmod 600 ~/.gnupg/secring.gpg  
-          echo "GPG_SECRET_KEY_RING_FILE_PATH=~/.gnupg/secring.gpg" >> $GITHUB_ENV
+          mkdir -p ~/.gnupg 
+          chmod 700 ~/.gnupg 
+
+          echo "$GPG_PRIVATE_KEY" | base64 --decode > private.key
+          chmod 600 private.key  
+
+          gpg --batch --import private.key
+          rm -f private.key  
 
           echo "allow-preset-passphrase" >> ~/.gnupg/gpg-agent.conf
           echo "use-agent" >> ~/.gnupg/gpg.conf
-
-          gpg --pinentry-mode loopback --passphrase "$GPG_PASSPHRASE" --batch --import ~/.gnupg/secring.gpg
-          gpg --pinentry-mode loopback --passphrase "$GPG_PASSPHRASE" --list-keys
-      
+        
+          gpg --list-secret-keys --keyid-format LONG
 
       - name: Publish to Maven Central
         env:
