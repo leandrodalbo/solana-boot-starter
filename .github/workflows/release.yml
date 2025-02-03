@@ -21,14 +21,15 @@ jobs:
           server-id: ossrh
           settings-path: ${{ github.workspace }}
 
+      - name: Set GPG private key
+        run: echo "ORG_GRADLE_PROJECT_signingInMemoryKey=${{ secrets.GPG_PRIVATE_KEY }}" >> $GITHUB_ENV
+
       - name: Publish to Maven Central
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
         run: |
-          echo "$GPG_PRIVATE_KEY" | base64 --decode > ./private.key
           ./gradlew publishAllPublicationsToMavenCentral --no-daemon --no-parallel 
 
