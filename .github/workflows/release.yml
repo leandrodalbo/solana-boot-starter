@@ -31,5 +31,5 @@ jobs:
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          ./gradlew publishAllPublicationsToMavenCentral --no-daemon --no-parallel -PsigningInMemoryKey=$(cat decoded-private-key.asc)
+          ./gradlew publishAllPublicationsToMavenCentral --no-daemon --no-parallel 
 
