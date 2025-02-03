@@ -21,32 +21,14 @@ jobs:
           server-id: ossrh
           settings-path: ${{ github.workspace }}
 
-      - name: Import GPG Key
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: |
-          mkdir -p ~/.gnupg 
-          chmod 700 ~/.gnupg 
-
-          echo "$GPG_PRIVATE_KEY" | base64 --decode > private.key
-          chmod 600 private.key  
-
-          gpg --batch --import private.key
-          rm -f private.key  
-
-          echo "allow-preset-passphrase" >> ~/.gnupg/gpg-agent.conf
-          echo "use-agent" >> ~/.gnupg/gpg.conf
-        
-          gpg --list-secret-keys --keyid-format LONG
-
       - name: Publish to Maven Central
         env:
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
-          ./gradlew clean build
-          ./gradlew publish --no-daemon
+          echo "$GPG_PRIVATE_KEY" | base64 --decode > ./private.key
+          ./gradlew publishAllPublicationsToMavenCentral --no-daemon --no-parallel 
 
