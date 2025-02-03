@@ -21,16 +21,12 @@ jobs:
           server-id: ossrh
           settings-path: ${{ github.workspace }}
 
-      - name: Decode private key
-        run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode > decoded-private-key.asc
-
       - name: Publish to Maven Central
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
           ./gradlew publishAllPublicationsToMavenCentral --no-daemon --no-parallel 
 
