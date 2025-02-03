@@ -23,7 +23,7 @@ jobs:
 
       - name: Set GPG private key
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode > decoded-private-key.asc
+          printf "%s" "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode > decoded-private-key.asc
           echo "ORG_GRADLE_PROJECT_signingInMemoryKey=$(cat decoded-private-key.asc)" >> $GITHUB_ENV
 
       - name: Publish to Maven Central
