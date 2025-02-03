@@ -2,7 +2,7 @@
 **/build/
 !src/**/build/
 .idea
-
+private.key
 # Ignore Gradle GUI config
 gradle-app.setting
 
