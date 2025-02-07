@@ -3,7 +3,8 @@ plugins {
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
-    id("com.vanniktech.maven.publish") version "0.30.0"
+    id("maven-publish")
+    id("signing")
 }
 
 java {
@@ -16,6 +17,7 @@ repositories {
     mavenCentral()
     mavenLocal()
 }
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -49,38 +51,71 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     enabled = false
 }
 
-mavenPublishing {
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, true)
-    if (!project.gradle.startParameter.taskNames.any { it.contains("publishToMavenLocal") }) {
-        signAllPublications()
-    }
+publishing {
+    repositories {
 
-    coordinates("io.bootsolana", "solana-boot-starter",  "1.0.0")
-
-    pom {
-        name = "Solana Boot Starter"
-        description = "Integrate Spring Boot with Solana"
-        inceptionYear = "2025"
-        url = "https://bootsolana.io"
-        licenses {
-            license {
-                name = "MIT License"
-                url = "https://opensource.org/licenses/MIT"
+        maven {
+            name = "MavenCentral"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: ""
+                password = System.getenv("MAVEN_CENTRAL_PASSWORD") ?: ""
             }
         }
-        developers {
-            developer {
-                id = "bootsolana"
-                name = "bootsolana"
-                url = "https://github.com/bootsolana"
+
+
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/bootsolana/solana-boot-starter")
+            credentials {
+                username = System.getenv("BOOTSOLANA_USER") ?: ""
+                password = System.getenv("BOOTSOLANA_TOKEN") ?: ""
             }
         }
-        scm {
-            url = "https://github.com/bootsolana/solana-boot-starter"
-            connection = "scm:git:git://github.com:bootsolana/solana-boot-starter.git"
-            developerConnection = "scm:git:ssh://git@github.com:bootsolana/solana-boot-starter.git"
+    }
+
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+
+            groupId = "io.bootsolana"
+            artifactId = "solana-boot-starter"
+            version = "1.0.0"
+
+            pom {
+                name.set("Solana Boot Starter")
+                description.set("Integrate Spring Boot with Solana")
+                inceptionYear.set("2025")
+                url.set("https://bootsolana.io")
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("bootsolana")
+                        name.set("Boot Solana")
+                        url.set("https://github.com/bootsolana")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/bootsolana/solana-boot-starter")
+                    connection.set("scm:git:git://github.com:bootsolana/solana-boot-starter.git")
+                    developerConnection.set("scm:git:ssh://git@github.com:bootsolana/solana-boot-starter.git")
+                }
+            }
         }
     }
+}
+
+signing {
+    useInMemoryPgpKeys(
+        System.getenv("GPG_PRIVATE_KEY"),
+        System.getenv("GPG_PASSPHRASE")
+    )
+    sign(publishing.publications["mavenJava"])
 }
 
 
